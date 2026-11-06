@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PS4 Simulation</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #111;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        #content-container {
+            text-align: center;
+            max-width: 90%;
+            transition: opacity 1s ease;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        #terminal {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            color: #fff; /* Weisse Schrift auf schwarzem Hintergrund */
+            font-family: 'Courier New', Courier, monospace;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.4;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="content-container">
+        <img src="66893.png" alt="GoldHEN By BRK 14.00">
+        <p style="color: #aaa; margin-top: 20px;">Bereite Umgebung vor...</p>
+    </div>
+
+    <div id="terminal"></div>
+
+    <script>
+        window.onload = function() {
+            // 1. Automatische Benachrichtigung senden
+            const ps4Ip = "192.168.0.9";
+            const port = "9090";
+            const message = encodeURIComponent("Demo gestartet: GoldHEN Simulation");
+            fetch(`http://${ps4Ip}:${port}/notify?message=${message}`, { mode: 'no-cors' })
+                .catch(e => console.log("Netzwerkfehler ignoriert für Demo"));
+
+            // 2. Nach 5 Sekunden die Simulation starten
+            setTimeout(function() {
+                document.getElementById('content-container').style.opacity = '0';
+                setTimeout(function() {
+                    document.getElementById('content-container').style.display = 'none';
+                    const term = document.getElementById('terminal');
+                    term.style.display = 'block';
+                    startSimulatedJailbreak(term);
+                }, 1000);
+            }, 5000);
+        };
+
+        function startSimulatedJailbreak(terminalElement) {
+            const simulatedLogs = [
+                "[i] InitializingWebKit exploit payload...",
+                "[+] WebKit process memory initialized.",
+                "[>] Searching for gadgets...",
+                "[+] Gadgets found at base address 0x800400000",
+                "[i] Bypassing sandbox protections...",
+                "[+] Sandbox escape successful.",
+                "[i] Loading GoldHEN payload v2.4b17...",
+                "[+] Payload injected successfully.",
+                "[i] Mounting system partitions...",
+                "[MNT] /system decrypted.",
+                "[MNT] /common decrypted.",
+                "[+] All patches applied successfully.",
+                "[*] GoldHEN is now active!",
+                "[*] Enjoy your homebrew environment.",
+                " ",
+                "Ready. Type command..."
+            ];
+
+            let i = 0;
+            function typeLog() {
+                if (i < simulatedLogs.length) {
+                    terminalElement.innerText += simulatedLogs[i] + "\n";
+                    terminalElement.scrollTop = terminalElement.scrollHeight;
+                    i++;
+                    setTimeout(typeLog, 400); // Geschwindigkeit der Zeilenausgabe
+                }
+            }
+            typeLog();
+        }
+    </script>
+
+</body>
+</html>
