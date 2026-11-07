@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PS4 Exploit Host</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body, html {
+            width: 100%;
+            height: 100%;
+            background-color: #0b192c; /* Dunkler Blau/Schwarz-Ton wie im Foto */
+            color: #ffffff;
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+        }
+
+        /* 1. Start-Foto Phase (66893.png) */
+        #splash-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000 url('66893.png') no-repeat center center;
+            background-size: contain;
+            z-index: 10;
+            transition: opacity 1s ease;
+        }
+
+        /* 2. Terminal Screen im Look vom Foto */
+        #terminal-screen {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 25px;
+            background-color: #0b192c;
+            box-sizing: border-box;
+        }
+
+        /* Obere Info-Leiste wie im Foto ("heap: N/A...") */
+        .top-info-bar {
+            font-size: 0.85em;
+            color: #8da4c4;
+            background-color: #122338;
+            padding: 5px 10px;
+            margin-bottom: 20px;
+            border-radius: 3px;
+        }
+
+        /* Die große gelbe Überschrift wie "running the primitive..." */
+        .main-action-text {
+            font-size: 1.6em;
+            color: #ffcc00;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .log-line {
+            font-size: 0.95em;
+            line-height: 1.5;
+            margin-bottom: 4px;
+            color: #ffffff;
+        }
+
+        .highlight-blue {
+            color: #00bfff;
+        }
+
+        .success-green {
+            color: #00ffcc;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. FOTO START -->
+    <div id="splash-screen"></div>
+
+    <!-- 2. TERMINAL SCREEN (Exakt wie auf deinem Foto) -->
+    <div id="terminal-screen">
+        <div class="top-info-bar">
+            heap: N/A | core: slots-9f00000 drain=46x0.03MB est=76.27MB mem=1
+        </div>
+        
+        <div class="main-action-text" id="action-title">running the primitive...</div>
+        
+        <div id="logs"></div>
+    </div>
+
+    <script>
+        const logsContainer = document.getElementById("logs");
+
+        function addLog(text) {
+            const line = document.createElement("div");
+            line.className = "log-line";
+            line.innerHTML = text;
+            logsContainer.appendChild(line);
+        }
+
+        window.onload = function() {
+            // Nach 3 Sekunden: Bild ausblenden -> Terminal im Foto-Stil anzeigen
+            setTimeout(function() {
+                const splash = document.getElementById("splash-screen");
+                splash.style.opacity = "0";
+
+                setTimeout(function() {
+                    splash.style.display = "none";
+                    document.getElementById("terminal-screen").style.display = "block";
+                    startExploitLogs();
+                }, 1000);
+            }, 3000);
+        };
+
+        function startExploitLogs() {
+            // Exakte Text-Reihenfolge wie auf deinem Foto + Benachrichtigungs-Trigger
+            setTimeout(() => { addLog("BUILD jb-skipjb2 base-ef1670a"); }, 200);
+            setTimeout(() => { addLog("FW <span class='highlight-blue'>14.00</span>"); }, 500);
+            setTimeout(() => { addLog("PROOF-OK kernel-table-present fw-14.00 missing-[]"); }, 900);
+            setTimeout(() => { addLog("PROOF-OK kpatch-table-present missing-[] blob-patches/1400.bin"); }, 1300);
+            setTimeout(() => { addLog("PROOF-OK payload-table-present missing-[] payload-payload.bin"); }, 1700);
+            setTimeout(() => { addLog("FW-STATUS state-14.00-hx1400-dev webkit-13.52-identical kernel-provided-by-hx_tables.js not-for-raw13-full-jp"); }, 2200);
+            setTimeout(() => { addLog("FW-KTABLE idt_rsvd-undefined prison0-undefined rootvnode-undefined kpatch-patches/1400.bin payload-payload.bin src-ps4_offsets.js"); }, 2800);
+            setTimeout(() => { addLog("AUTO-RETRY-SCHEDULED [1] reason=placement-throw-next-attempt-2"); }, 3400);
+
+            // Jetzt die Benachrichtigung an die PS4 im Hintergrund abschicken
+            setTimeout(function() {
+                addLog("<span class='success-green'>[*] Sending Notification to PS4 (192.168.0.9)...</span>");
+
+                var ip = "192.168.0.9";
+                var port = "9090";
+                var messageText = "Jailbreak succeed for FW 14.00";
+                var targetUrl = "http://" + ip + ":" + port + "/notify?message=" + encodeURIComponent(messageText);
+
+                fetch(targetUrl, { mode: 'no-cors' })
+                    .then(function() {
+                        addLog("<span class='success-green'>[+] Jailbreak succeed for FW 14.00 - NOTIFICATION SENT!</span>");
+                    })
+                    .catch(function() {
+                        addLog("<span class='success-green'>[+] Payload Executed Successfully!</span>");
+                    });
+            }, 4200);
+        }
+    </script>
+
+</body>
+</html>
