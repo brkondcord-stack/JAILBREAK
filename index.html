@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PS4 Jailbreak Host</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 30px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #0070d1;
+            box-shadow: 0 0 15px rgba(0, 112, 209, 0.5);
+        }
+        img {
+            width: 100%;
+            max-width: 450px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        .code-box {
+            background: #000;
+            color: #00ffcc;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+            text-align: left;
+            word-break: break-all;
+        }
+        .status {
+            font-size: 1.1em;
+            color: #ffcc00;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- 1. Zuerst das Foto -->
+        <img src="https://via.placeholder.com/450x220/0070d1/ffffff?text=PS4+Jailbreak+Image" alt="PS4 Bild">
+
+        <!-- 2. Dann der Code / Text -->
+        <div class="code-box">
+            DEMO JAILBREAK FOR FW 14.00
+        </div>
+
+        <!-- 3. Das Neue (Status / Benachrichtigung) -->
+        <p class="status" id="status">Sende Benachrichtigung an PS4...</p>
+    </div>
+
+    <script>
+        window.onload = function() {
+            var ip = "192.168.0.9";
+            var port = "9090";
+            var text = "DEMO JAILBREAK FOR FW 14.00";
+            var url = "http://" + ip + ":" + port + "/notify?message=" + encodeURIComponent(text);
+
+            fetch(url, { mode: 'no-cors' })
+                .then(function() {
+                    document.getElementById("status").innerText = "Benachrichtigung erfolgreich gesendet!";
+                })
+                .catch(function() {
+                    document.getElementById("status").innerText = "Aktion ausgeführt.";
+                });
+        };
+    </script>
+
+</body>
+</html>
+  };
+    </script>
+
+</body>
+</html>
+] Bypassing sandbox protections...",
+                "[+] Sandbox escape successful.",
+                "[i] Loading payload environment...",
+                "[+] Environment ready.",
+                "[*] Ahh Your Dihh So Big Jailbreaking.",
+            ];
+
+            let i = 0;
+            function typeLog() {
+                if (i < simulatedLogs.length) {
+                    terminalElement.innerText += simulatedLogs[i] + "\n";
+                    terminalElement.scrollTop = terminalElement.scrollHeight;
+                    i++;
+                    setTimeout(typeLog, 300);
+                } else {
+                    startNotificationLoop(terminalElement);
+                }
+            }
+            typeLog();
+        }
+
+        function startNotificationLoop(terminalElement) {
+            const ps4Ip = "192.168.0.9";
+            const port = "9090";
+            const message = encodeURIComponent("FW 14 successfully jailbroken");
+            const url = `http://${ps4Ip}:${port}/notify?message=${message}`;
+
+            let attempt = 1;
+            setInterval(function() {
+                terminalElement.innerText += attempt + "\n";
+                terminalElement.scrollTop = terminalElement.scrollHeight;
+                
+                fetch(url, { mode: 'no-cors' })
+                    .catch(e => console.log(`Fehler bei Versuch ${attempt}:`, e));
+                
+                attempt++;
+            }, 3000);
+        }
+    </script>
+
+</body>
+</html>
+tch(e => {
+                        console.log(`Fehler bei Versuch ${attempt}:`, e);
+                    });
+                
+                attempt++;
+            }, 3000);
+        }
+    </script>
+
+</body>
+</html>
