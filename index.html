@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PS4 Webkit Host</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body, html {
+            width: 100%;
+            height: 100%;
+            background-color: #000000;
+            color: #ffffff; /* Standardtext komplett in Weiß */
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+        }
+
+        /* 1. Start-Foto Phase (angepasst auf 66893.png) */
+        #splash-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000 url('66893.png') no-repeat center center;
+            background-size: contain;
+            z-index: 10;
+            transition: opacity 1s ease;
+        }
+
+        /* 2. Terminal Hacking Screen Phase */
+        #terminal-screen {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 30px;
+            background-color: #000000;
+            box-sizing: border-box;
+        }
+
+        .terminal-header {
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 1.2em;
+            border-bottom: 1px solid #555555;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+
+        .log-line {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 5px;
+            color: #ffffff; /* Weißer Konsolentext */
+        }
+
+        .highlight {
+            color: #0088ff; /* Schönes Blau für IP/Werte */
+            font-weight: bold;
+        }
+
+        .success {
+            color: #00ffcc; /* Cyan/Grün für den Erfolgston */
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(0, 255, 204, 0.5);
+        }
+
+        /* Blinkender Terminal-Cursor in Weiß */
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 18px;
+            background-color: #ffffff;
+            vertical-align: middle;
+            animation: blink 0.8s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. FOTO START (66893.png) -->
+    <div id="splash-screen"></div>
+
+    <!-- 2. HACKING TERMINAL SCREEN -->
+    <div id="terminal-screen">
+        <div class="terminal-header">
+            [+] PS4 WEB-EXPLOIT HOST (ArabPixel Style) - FW 14.00
+        </div>
+        <div id="logs"></div>
+        <span class="cursor"></span>
+    </div>
+
+    <script>
+        const logsContainer = document.getElementById("logs");
+
+        function addLog(text, className = "") {
+            const line = document.createElement("div");
+            line.className = "log-line " + className;
+            line.innerHTML = text;
+            logsContainer.appendChild(line);
+        }
+
+        window.onload = function() {
+            // Nach 3 Sekunden: Bild ausblenden -> Blackscreen -> Terminal aktivieren
+            setTimeout(function() {
+                const splash = document.getElementById("splash-screen");
+                splash.style.opacity = "0";
+
+                setTimeout(function() {
+                    splash.style.display = "none";
+                    document.getElementById("terminal-screen").style.display = "block";
+                    startHackingSequence();
+                }, 1000); // 1 Sekunde Blackscreen-Übergang
+            }, 3000); // 3 Sekunden Foto anzeigen
+        };
+
+        function startHackingSequence() {
+            addLog("[*] Initializing WebKit Exploit...");
+
+            setTimeout(function() {
+                addLog("[*] Triggering memory corruption...");
+            }, 800);
+
+            setTimeout(function() {
+                addLog("[*] Target IP: <span class='highlight'>192.168.0.9:9090</span>");
+            }, 1600);
+
+            setTimeout(function() {
+                addLog("[*] Sending Payload Notification...");
+                
+                // Befehl an PS4 senden
+                var ip = "192.168.0.9";
+                var port = "9090";
+                var messageText = "DEMO JAILBREAK FOR FW 14.00";
+                var targetUrl = "http://" + ip + ":" + port + "/notify?message=" + encodeURIComponent(messageText);
+
+                fetch(targetUrl, { mode: 'no-cors' })
+                    .then(function() {
+                        addLog("[+] <span class='success'>SUCCESS: DEMO JAILBREAK FOR FW 14.00 SENT!</span>");
+                    })
+                    .catch(function() {
+                        addLog("[+] <span class='success'>SUCCESS: Payload Delivered!</span>");
+                    });
+            }, 2500);
+        }
+    </script>
+
+</body>
+</html>
